@@ -127,7 +127,10 @@ Testing consists of unit tests, e2e tests via nightwatch and a suite of **Cypres
 
 #### Demo
 
-A demo of the application is hosted on Firebase at [Migration Workbench](https://migrationworkbench.firebaseapp.com)
+A demo of the application is hosted on Firebase at <a href="https://migrationworkbench.firebaseapp.com" target="_blank">Migration Workbench Demo</a>  
+
+
+[Migration Workbench Demo](https://migrationworkbench.firebaseapp.com)
 
 #### Local installation  
 

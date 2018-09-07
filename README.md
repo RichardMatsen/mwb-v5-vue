@@ -73,12 +73,12 @@ Testing consists of unit tests, e2e tests via nightwatch and a suite of **Cypres
 
 ## **Documentation pages**  
   
-- [Measure Calculation](./docs/measure-calculation.md)
-- [DashboardThumbnail component](./docs/dashboard-thumbnail.md)
-- [DashboardThumbnail Dropdown Panel](./docs/narrative-dropdown-panel.md)
-- [Scrollbar CSS Adjustments](./docs/scrollbar-css-adjustments.md)
-- [SearchComponent Testing Notes](./docs/search.component-tests.md)
-- [Test Code Coverage](./docs/code-coverage.md)
+- [Measure Calculation](./static/docs/measure-calculation.md)
+- [DashboardThumbnail component](./static/docs/dashboard-thumbnail.md)
+- [DashboardThumbnail Dropdown Panel](./static/docs/narrative-dropdown-panel.md)
+- [Scrollbar CSS Adjustments](./static/docs/scrollbar-css-adjustments.md)
+- [SearchComponent Testing Notes](./static/docs/search.component-tests.md)
+- [Test Code Coverage](./static/docs/code-coverage.md)
 
 <br/>
 

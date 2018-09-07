@@ -1,0 +1,109 @@
+<h1 id="cypress-e2e-testing">Cypress e2e testing</h1>
+<p>The Cypress testing framework is more user friendly than the Protractor/Karma/Selenium tools provided with Angular.</p>
+<p><img src="static/docs/./images/CypressDashboardTest.jpg" alt="Cypress testing"></p>
+<h2 id="why-cypress">Why Cypress</h2>
+<ul>
+<li>Features assisting failure correction<ul>
+<li>Gui-based, easier to read and track error messages</li>
+<li>Error information expands into chrome dev console on click</li>
+<li>Steps (commands) within tests are enumerated, makes point of failure more obvious</li>
+</ul>
+</li>
+<li>Commands = implicit assertions + retry<ul>
+<li>Selector commands contain built-in assertions</li>
+<li>Saves boiler-plate expects</li>
+<li>Auto-retry of commands until success or timeout</li>
+</ul>
+</li>
+<li>Observe test execution<ul>
+<li>Real-time view of tested page with highlight of selected elements</li>
+<li>Snapshot of page at each command, allows time-travel review of page at each step</li>
+<li>Before and after snapshots on user actions (e.g clicks)</li>
+</ul>
+</li>
+<li>Async commands wait (mostly) for the page to settle</li>
+<li>Wide range of built-in commands</li>
+<li>Easily implement user-defined commands and test helpers</li>
+</ul>
+<h2 id="waiting-for-the-page">Waiting for the page</h2>
+<h3 id="the-problem-with-waiting">The problem with waiting</h3>
+<p>If a web page fetches data asynchronously, a delay will occur before complete rendering. In a Selenium e2e test, we add a wait to handle this.<br>However the load time can vary depending on workstation and network load, so a maximum wait period needs to be set - but even then a test can exceed this period, and the test sporadically fails.</p>
+<h3 id="retry-until-success">Retry until success</h3>
+<p>Cypress commands have a built-in retry mechanism. This pattern of waiting is better than an explicit wait period, as it will succeed as soon as the fetch completes. As long as the timeout is sufficiently long (default is 5s) tests should not sporadically fail due to loading.</p>
+<p>The key to implementing this type of page load is to pick a &#39;canary&#39; element, one that has it&#39;s content set last and test for that particular content, e.g below we wait for the page to contain the text <strong>&#39;99.53%&#39;</strong></p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> load_page = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  cy.viewport((<span class="hljs-number">3000</span>/<span class="hljs-number">1.5</span>), (<span class="hljs-number">2000</span>/<span class="hljs-number">1.5</span>))
+  cy.visit(<span class="hljs-string">'/'</span>)
+  <span class="hljs-comment">// wait for the last metric to get calculated text</span>
+  cy.contains(<span class="hljs-string">'99.53%'</span>, {<span class="hljs-attr">timeout</span>: <span class="hljs-number">10000</span>})  
+}</code></pre>
+<h2 id="test-suite-structure">Test suite structure</h2>
+<p>A page is tested in three sections - Static, Layout, and Actions.</p>
+<h3 id="static-tests">Static tests</h3>
+<p>These tests check the static look of the page after it first loads, i.e which elements are present, what are their attributes.</p>
+<p>They do not change the view, so only one page load (implemented in a <code>before()</code> command) is required for all of them, allowing these tests to proceed much faster.</p>
+<p>Depending on the nature of the page, this can be the bulk of the tests.</p>
+<pre><code class="language-javascript">describe(<span class="hljs-string">'Dashboard Page'</span>, () =&gt; {
+
+  before(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    cy.visit(<span class="hljs-string">'/'</span>)
+    cy.contains(<span class="hljs-string">'99.53%'</span>, {timeout: <span class="hljs-number">10000</span>})  
+  })
+
+  context(<span class="hljs-string">'static features'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+    context(<span class="hljs-string">'Dashboard'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+      it(<span class="hljs-string">'should display Dashboard title'</span>, () =&gt; {
+        cy.get(<span class="hljs-string">'.dashboard&gt;h1'</span>).should(<span class="hljs-string">'contain'</span>, <span class="hljs-string">'Dashboard'</span>)
+      });
+      ...</code></pre>
+<h3 id="layout-tests">Layout tests</h3>
+<p>Layout tests attempt to do in code what the eye does automatically - check the element layout looks correct.</p>
+<p>These tests generally do not use exact measurements, as this would make the brittle. Instead it uses higher-order concepts such as element ordering, alignment, and justification.</p>
+<pre><code class="language-javascript">context('layout', () =&gt; {
+
+  beforeEach(<span class="hljs-name">function</span> () {
+    cy.viewport((<span class="hljs-number">3000/1</span>.<span class="hljs-number">5</span>), (<span class="hljs-number">2000/1</span>.<span class="hljs-number">5</span>))
+  })
+
+  describe('Thumbnail content', () =&gt; {
+
+    const selectors = ['.measure-icon','.title', '.filler', 'sparkline', '.badge']
+
+    it('should display thumbnail contents in order', () =&gt; {
+      cy.get('.thumbnail').each(<span class="hljs-name">el</span> =&gt; {
+        cy.wrap(<span class="hljs-name">el</span>).selectorsAreOrdered(<span class="hljs-name">selectors</span>)
+      })
+    })
+
+    it('should vertically align to center the thumbnail contents', () =&gt; {
+      cy.get('.thumbnail').each(<span class="hljs-name">el</span> =&gt; {
+        cy.wrap(<span class="hljs-name">el</span>).find(<span class="hljs-name">selectors</span>.join(', '))
+          .then(<span class="hljs-name">children</span> =&gt; {
+            const sortedSelectors = [...children].map(<span class="hljs-name">el</span> =&gt; getSelector(<span class="hljs-name">el</span>, selectors))
+            const vcs = [...children].map(<span class="hljs-name">child</span> =&gt; elementVerticalCenter(<span class="hljs-name">child</span>))
+            expect(<span class="hljs-name">areAligned</span>(<span class="hljs-name">vcs</span>)).to.be.true
+          })
+      })
+    })</code></pre>
+<h3 id="action-tests">Action tests</h3>
+<p>These test user actions on the page, e.g clicks, selects, inputs. They will require a fresh page load between tests, so run slower than the static tests. (Note the <code>cy.wait()</code> does not have to be as long as the initial page load, since the files have not changed and fetch will return a network status of 304 - Not modified).</p>
+<pre><code class="language-javascript">context(<span class="hljs-string">'actions'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+
+  describe(<span class="hljs-string">'thumbnail navigation'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+
+    beforeEach(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+      cy.visit(<span class="hljs-string">'/'</span>)
+      cy.contains(<span class="hljs-string">'99.53%'</span>, {timeout: <span class="hljs-number">10000</span>})  
+    })
+
+    [<span class="hljs-string">'validations'</span>, <span class="hljs-string">'referentials'</span>, <span class="hljs-string">'clinics'</span>].forEach(<span class="hljs-function"><span class="hljs-params">(page, index)</span> =&gt;</span> {
+
+      it(`<span class="javascript">should navigate to <span class="hljs-string">'${page}'</span></span>`, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+        cy.get(<span class="hljs-string">'.thumbnail a.measure'</span>).eq(index).click()
+        cy.location().should(<span class="hljs-function"><span class="hljs-params">(loc)</span> =&gt;</span> {
+          expect(loc.href).to.eq(`<span class="javascript">http:<span class="hljs-comment">//localhost:4200/${page}</span></span>`)
+        })
+      });
+
+    })
+  });</code></pre>

@@ -1,0 +1,71 @@
+<p>Task:
+  Migrating from Angular with Bootstrap 3 js + jQuery.
+  Target div has collapse class and button has...
+    data-toggle=&quot;collapse&quot; [attr.data-target]=&quot;&#39;#narrtext_&#39;+measure.id&quot;
+    ...which relies on Bootstrap js.</p>
+<p>Emulating the Angular setup:
+  In Vue, Bootstrap 3 js complains about not seeing jQuery even if it is imported.</p>
+<p>Trying packaged modules:
+  Vue-strap doesn&#39;t have a component for collapse
+  BootstrapVue is for Bootstrap 4</p>
+<p>First attempt mixing Vue transition directive and Bootstrap collapse/in classes:
+  Use :class=&quot;{in: isExpanded}&quot; to add/remove the in class from the target div (otherwise remains collapsed).
+  Use: v-show=&quot;isExpanded&quot; as hook for animation.
+  Note, no animation on the height of the well.
+  Works ok, but can be simplified by removing bootstrap collapse.</p>
+<p>Final soultion:
+  Remove collapse from target div (narrative text + hr).
+  Use &lt;transition name=&quot;slide-fade&quot; type=&quot;animation&quot; @enter=&quot;heightEnterAnimation&quot; @leave=&quot;heightLeaveAnimation&quot;&gt; wrapper around target div.
+  Use: v-show=&quot;isExpanded&quot; as hook for animation.
+  Use the following animation css:</p>
+<pre><code><span class="hljs-selector-class">.slide-fade-enter</span> {
+  <span class="hljs-comment">/* tranform: translateY(20px); */</span> 
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+}
+<span class="hljs-selector-class">.slide-fade-enter-active</span> {
+  <span class="hljs-attribute">animation</span>: slide-in <span class="hljs-number">1s</span> ease-out forwards;
+  <span class="hljs-attribute">transition</span>: opacity <span class="hljs-number">0.5s</span>;
+}
+<span class="hljs-selector-class">.slide-fade-leave</span> {
+}
+<span class="hljs-selector-class">.slide-fade-leave-active</span> {
+  <span class="hljs-attribute">animation</span>: slide-out <span class="hljs-number">0.2s</span> ease-out forwards;
+  <span class="hljs-attribute">transition</span>: opacity <span class="hljs-number">0.2s</span>;
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+}
+@<span class="hljs-keyword">keyframes</span> slide-in {
+  <span class="hljs-selector-tag">from</span> {
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(20px)
+  }
+  <span class="hljs-selector-tag">to</span> {
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(0)
+  }
+}
+@<span class="hljs-keyword">keyframes</span> slide-out {
+  <span class="hljs-selector-tag">from</span> {
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(0)
+  }
+  <span class="hljs-selector-tag">to</span> {
+    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(20px)
+  }
+}</code></pre><p>  To animate the height, use javascript animation hooks (@enter=&quot;heightEnterAnimation&quot; @leave=&quot;heightLeaveAnimation&quot;) with the following code:</p>
+<pre><code>methods: {
+  heightEnterAnimation (el, <span class="hljs-keyword">done</span>) {
+    this.heightAnimation(el, <span class="hljs-keyword">done</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">true</span>)
+  },
+  heightLeaveAnimation (el, <span class="hljs-keyword">done</span>) {
+    this.heightAnimation(el, <span class="hljs-keyword">done</span>, <span class="hljs-number">100</span>, <span class="hljs-literal">false</span>)
+  },
+  heightAnimation (el, <span class="hljs-keyword">done</span>, start, expand) {
+    <span class="hljs-keyword">let</span> counter = <span class="hljs-number">0</span>
+    const interval = setInterval(<span class="hljs-literal">()</span> =&gt; {
+      const increment = (expand ? <span class="hljs-number">1</span> : -<span class="hljs-number">1</span>) * counter * <span class="hljs-number">5</span>
+      el.style.maxHeight = (start + increment) + <span class="hljs-symbol">'px'</span>
+      counter++
+      <span class="hljs-keyword">if</span> (counter &gt; <span class="hljs-number">20</span>) {
+        clearInterval(interval)
+        <span class="hljs-keyword">done</span><span class="hljs-literal">()</span>
+      }
+    }, <span class="hljs-number">20</span>)
+  }
+},</code></pre>

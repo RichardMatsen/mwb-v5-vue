@@ -1,0 +1,41 @@
+<h1 id="dashboardthumbnail-component">DashboardThumbnail Component</h1>
+<p>Dashboard thumbnails are the key component for the dashboard view.</p>
+<p><img src="static/docs/./images/DashboardThumbnail.jpg" alt="dashboard thumbnail"></p>
+<h2 id="features">Features</h2>
+<ul>
+<li>A panel for each metric</li>
+<li>Panels vertically stacked, mobile responsive</li>
+<li>Elements within panel should be vertically aligned</li>
+<li>Left side elements: icon and title</li>
+<li>Right side elements: badge with color and value, sparkline</li>
+<li>Click icon and title to go to detail page</li>
+<li>Optional auth required on link</li>
+</ul>
+<p><strong>Basic layout</strong><br>Panels are implemented with bootstrap <code>class=&quot;well well-sm&quot;</code> (mobile responsive).</p>
+<p><strong>Aligning elements vertically</strong><br>Content elements of the thumbnail are vertically aligned with <code>{display: flex}</code> on the enclosing div and <code>{margin: auto}</code> on the element.<br>Content elements can also adjust left and right margins (but not top and bottom).</p>
+<pre><code class="language-javascript"><span class="hljs-selector-tag">div</span><span class="hljs-selector-class">.metric</span> {
+  <span class="hljs-attribute">display</span>: flex;
+  <span class="hljs-attribute">justify-content</span>: space-between;
+}
+error-badge {
+  ...
+  <span class="hljs-attribute">margin</span>: auto;
+  <span class="hljs-attribute">margin-left</span>: <span class="hljs-number">10px</span>;
+  <span class="hljs-attribute">margin-right</span>: <span class="hljs-number">10px</span>;
+}</code></pre>
+<p><strong>Shifting elements left and right</strong><br>Left-side and right-side elements are separated by a filler element, which uses CSS flex-grow to fill remaining space, thereby right-justifying following elements.</p>
+<pre><code class="language-javascript">&lt;<span class="hljs-selector-tag">div</span> class=<span class="hljs-string">"filler"</span>&gt;&lt;/div&gt;
+
+<span class="hljs-selector-tag">div</span><span class="hljs-selector-class">.filler</span> {
+  <span class="hljs-attribute">flex-grow</span>: <span class="hljs-number">1</span>;
+}</code></pre>
+<p><strong>Linking to detail pages</strong><br>Link is implemented with routerLink attribute:</p>
+<pre><code class="language-html">&lt;a <span class="hljs-keyword">class</span>=<span class="hljs-string">"measure"</span> [routerLink]=<span class="hljs-string">"['/'+ measure.link ]"</span> &gt;`.  </code></pre>
+<p>Auth on Task metric is implemented with a route guard in AppRoutingModule:</p>
+<pre><code class="language-javascript">{
+  <span class="hljs-attribute">path</span>: <span class="hljs-string">'tasks'</span>,
+  <span class="hljs-attribute">canActivate</span>: [AuthguardService],
+  <span class="hljs-attribute">component</span>: TasksComponent,
+  <span class="hljs-attribute">data</span>: { <span class="hljs-attribute">toastrPrompt</span>: <span class="hljs-string">'Team Tasks'</span>}
+}</code></pre>
+<p>The data attribute allows a common Authguard component to receive use-specific static data (e.g Toastr text).</p>

@@ -1,0 +1,42 @@
+<h2 id="searchcomponent-testing-notes">SearchComponent Testing Notes</h2>
+<ol>
+<li><p>Uses Location.path to determine which page is active, and decide if it&#39;s searchable (not strictly necessary after move of the search control from the nav-bar to the common page component)<br>Need to use SpyLocation to mock Location.</p>
+<ul>
+<li>Can&#39;t use a standard jasmine mockLocation (component will not compile).</li>
+<li>Note, jasmine mock is sufficient for similar tests on a service</li>
+<li>use a simple constructor call to new-up a service:</li>
+<li>searchService = new SearchService(mockLocation, mockNgReduxDispatcher, mockActions);  </li>
+</ul>
+<p>Info on SpyLocation:</p>
+<ul>
+<li>Angular docs page for SpyLocation is missing</li>
+<li>the library for Spylocation is reported in various places over time</li>
+<li>currently (June 2017) is: import { SpyLocation } from &quot;@angular/common/testing&quot;;  </li>
+</ul>
+<p>Set up SpyLocation:</p>
+<ul>
+<li>in TestBed.configureTestingModule:<ul>
+<li>providers: [{provide: Location, useClass: SpyLocation}],</li>
+</ul>
+</li>
+<li>get a reference to it:<ul>
+<li>location = TestBed.get(Location);</li>
+</ul>
+</li>
+<li>Router and routes not needed for this test</li>
+<li>To mock Location.path(), use: <ul>
+<li>location.go(&#39;notSearchablePage&#39;)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Refactor the component to make use of NgRedux/store more granular.
+This makes testing easier, as internal steps can be simply tested by expecting calls on mockActions.  </p>
+</li>
+<li><p>Use NgRedux test helpers to set up the store:
+MockNgRedux.reset();
+setupMockStore([&#39;search&#39;], { page: &#39;validations&#39;, searchTerm: &#39;test&#39;, results: [] })
+setupMockStore([&#39;pages&#39;, &#39;validations&#39;, &#39;visibleFiles&#39;], testFiles)
+logMockStore();  // Debugging: Check what is in the store </p>
+</li>
+</ol>

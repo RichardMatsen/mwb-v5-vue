@@ -1,0 +1,61 @@
+div.well {
+  margin-top: 5px;
+  height: 100%;
+  width: 100%;
+}
+
+div.metric {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+a.measure {
+  margin: 6px 3px;
+  padding: 6px 7px;
+  min-width: 70px;
+  cursor: pointer;
+}
+
+  div.metric i.measure-icon {
+    font-size: xx-large;
+    line-height: normal;
+  }
+
+  span.title {
+    margin-left: 0.5em;
+    font-size: xx-large;
+  }
+  
+div.filler {  /* Keeps subsequent items right justified */
+  flex-grow: 1;
+}
+
+div.error-badge-outer {
+  min-width: 35px;
+  font-size: x-large;
+  font-family: "Courier New", Courier, monospace;
+  margin: auto;
+  margin-left: 10px;
+  margin-right: 10px;
+  flex-basis: 3.3em;
+}
+
+.sparkline {
+  margin: auto;
+  margin-left: 10px;
+  margin-right: 10px;
+  flex-basis: 3em;
+}
+
+@media screen and (max-width: 640px) {
+  span.title {
+    font-size: x-large;
+  }
+  div.error-badge {
+    font-size: large;
+  }
+}

@@ -1,0 +1,26 @@
+<h2 id="functional-issues">Functional Issues</h2>
+<ul>
+<li>Some of the Linqpad output html has event handlers linked to javascript that does not exist, or does not work inside the Angular app.</li>
+</ul>
+<p>e.g
+<strong>Emergency RI checks (03 Jul 2016 - 17.12).html</strong></p>
+<pre><code class="language-html">    &lt;a href=<span class="hljs-string">""</span> <span class="hljs-class"><span class="hljs-keyword">class</span></span>=<span class="hljs-string">"typeheader"</span> onclick=<span class="hljs-string">"return toggle('t11');"</span>&gt;
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"typeglyphx"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"t11ud"</span>&gt;</span>˄<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>
+      List&amp;lt;RIResult&amp;gt; (<span class="hljs-number">9</span> items)
+    &lt;<span class="hljs-regexp">/a&gt;</span></code></pre>
+<h2 id="browser-issues">Browser Issues</h2>
+<ul>
+<li><p>Moz, Edge - scrollbar styling not working (<a href="https://css-tricks.com/forums/topic/css-tags-for-mozilla-browser-to-style-scrollbar/">https://css-tricks.com/forums/topic/css-tags-for-mozilla-browser-to-style-scrollbar/</a>)</p>
+</li>
+<li><p>Moz, Edge - path text in ReferentialDiagram not showing (appears stacked at upper right in Moz non-maximized window)</p>
+</li>
+<li><p>Edge - url works but creates console error:</p>
+</li>
+</ul>
+<p>HTML1300: Navigation occurred.
+referentials
+HTTP404: NOT FOUND - The server has not found anything matching the requested URI (Uniform Resource Identifier).
+(XHR)GET - <a href="http://localhost:4200/referentials">http://localhost:4200/referentials</a></p>
+<ul>
+<li>Chrome, Moz - content spilling out of md-card in non-maximized window</li>
+</ul>

@@ -1,0 +1,63 @@
+
+.card {
+  height: 58em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+div#filecontent {
+  display: block;
+  justify-content: start;
+}
+
+div.container-fluid {
+  overflow: hidden;
+}
+
+hr { 
+  margin-bottom: 0.1em; 
+}
+
+div.bannertitle-container {
+  display: block;
+}
+
+div.bannertitle {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding-left: 15px;
+  margin-top: 1.5em;
+}
+div.bannertitle h1 {
+  margin: auto;
+  margin-left: 0;
+}
+
+.search {
+  margin: auto;
+  margin-right: 15px;
+}
+
+div.filelistcontainer { 
+  padding: 0; 
+}
+#filelist { 
+  margin-top: 2em 
+}
+
+div.result { 
+  padding-left: 0.7em; 
+}
+div.result-wrapper { 
+  overflow-y: auto; 
+  padding-left: 0.10em; 
+  height: 88% 
+}
+
+@media only screen and (min-width: 990px) {
+  /* Make content take remainder of the page */
+  div.filelistcontainer { height: calc(100vh - 220px); }
+  div.result { height: calc(100vh - 220px); }
+}

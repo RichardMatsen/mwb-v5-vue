@@ -1,0 +1,101 @@
+<h1 id="scrollbar-css-adjustments">Scrollbar CSS Adjustments</h1>
+<p><img src="static/docs/./images/Scrollbar_CSS_Adjustment.jpg" alt="narrative dropdown"></p>
+<p>The file-list component is a wrapper for a listbox, with the following features on the scroll bar:</p>
+<ul>
+<li>thinner scroll thumb, since horizontal space is at a premium</li>
+<li>no up/down arrows at top and bottom</li>
+<li>jump to scrollbar bottom when list elements increase</li>
+<li>maintains constant list width when scrollbar appears</li>
+</ul>
+<h2 id="scroll-to-bottom-when-list-changes"><strong>Scroll-to-bottom when list changes</strong></h2>
+<p>This is achieved by setting the <strong>scrollTop</strong> attribute via an expression.</p>
+<pre><code class="language-html{1}">&lt;<span class="hljs-selector-tag">ul</span> <span class="hljs-selector-id">#scrollingList</span> [scrollTop]=<span class="hljs-string">"scrollingList.scrollHeight"</span>&gt;
+  &lt;<span class="hljs-selector-tag">li</span> *ngFor=<span class="hljs-string">"let item of visibleFiles"</span>&gt;
+  ...
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<h2 id="styles-for-thin-scrollbar"><strong>Styles for thin scrollbar</strong></h2>
+<p>Use vendor-prefixes to change various attributes of the scrollbar.</p>
+<pre><code class="language-css"><span class="hljs-selector-pseudo">::-webkit-scrollbar</span>
+{
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">0.6em</span>;  <span class="hljs-comment">/* for vertical scrollbars */</span>
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">0.6em</span>; <span class="hljs-comment">/* for horizontal scrollbars */</span>
+  <span class="hljs-attribute">margin-right</span>: -<span class="hljs-number">0.8em</span>;
+}
+
+<span class="hljs-selector-pseudo">::-webkit-scrollbar-track</span>
+{
+  <span class="hljs-attribute">background</span>: <span class="hljs-number">#2175bc</span>;
+}
+
+<span class="hljs-selector-pseudo">::-webkit-scrollbar-thumb</span>
+{
+  <span class="hljs-attribute">background</span>: <span class="hljs-number">#90bade</span>;
+}
+
+<span class="hljs-selector-tag">ul</span> {
+  <span class="hljs-attribute">scrollbar-track-color</span>: <span class="hljs-number">#2175bc</span>;
+  <span class="hljs-attribute">scrollbar-face-color</span>: <span class="hljs-number">#90bade</span>;
+}
+
+<span class="hljs-selector-pseudo">::-moz-scrollbar</span>
+{
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">0.6em</span>;  <span class="hljs-comment">/* for vertical scrollbars */</span>
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">0.6em</span>; <span class="hljs-comment">/* for horizontal scrollbars */</span>
+}
+
+<span class="hljs-selector-pseudo">::-moz-scrollbar-track</span>
+{
+  <span class="hljs-attribute">background</span>: <span class="hljs-number">#2175bc</span>;
+}
+
+<span class="hljs-selector-pseudo">::-moz-scrollbar-thumb</span>
+{
+  <span class="hljs-attribute">background</span>: <span class="hljs-number">#90bade</span>;
+}</code></pre>
+<h2 id="auto-scrollbar-prevent-list-width-change"><strong>Auto scrollbar prevent list width change</strong></h2>
+<p><code>overflow-y</code> is set to <code>auto</code>, so when the scrollbar appears the list redraws, as it&#39;s area is made narrower. To avoid the &#39;blink&#39; on redraw, we maintain a constant list width by adjusting <strong>padding-right</strong> on the list.  </p>
+<p>This needs to be done in javascript in order to detect the scrollbar appearance during Angular&#39;s change detection cycle.</p>
+<h2 id="scrollbarpaddingadjust-directive"><strong>ScrollbarPaddingAdjust directive</strong></h2>
+<p>The code for this is wrapped in an attribute directive, which grabs a reference to it&#39;s host element and changes it&#39;s properties as appropriate.</p>
+<p><strong>Host Reference</strong><br>The elements of the host component are accessed by injecting the host.  </p>
+<pre><code class="language-ts{5}"><span class="hljs-meta">@Directive</span>({
+  selector: <span class="hljs-string">'[scrollbarPaddingAdjust]'</span>,
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ScrollbarPaddingAdjust <span class="hljs-keyword">implements</span> AfterViewInit, AfterViewChecked {
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> elementRef: ElementRef</span>) {}
+  ...
+}</code></pre>
+<p><strong>Host configuration</strong><br>The configuration required for this to work is checked in <strong>ngAfterViewInit</strong>.</p>
+<pre><code class="language-ts"><span class="hljs-keyword">private</span> hostConfigOk;
+<span class="hljs-keyword">private</span> wrapper;
+<span class="hljs-keyword">private</span> list;
+
+ngAfterViewInit() {
+  <span class="hljs-keyword">this</span>.getHostConfig();
+}
+
+getHostConfig() {
+  <span class="hljs-keyword">this</span>.wrapper = <span class="hljs-keyword">this</span>.elementRef.nativeElement;
+  <span class="hljs-keyword">this</span>.list = <span class="hljs-keyword">this</span>.wrapper.querySelector(<span class="hljs-string">'ul'</span>);
+  <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.list) {
+    <span class="hljs-keyword">this</span>.hostConfigOk = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">return</span>;
+  }
+  const overflowY = <span class="hljs-keyword">this</span>.list.ownerDocument.defaultView
+    .getComputedStyle(<span class="hljs-keyword">this</span>.list, undefined).overflowY;
+  <span class="hljs-keyword">this</span>.hostConfigOk = (overflowY === <span class="hljs-string">'auto'</span> || overflowY === <span class="hljs-string">'scroll'</span>)
+    &amp;&amp; <span class="hljs-keyword">this</span>.wrapper &amp;&amp; <span class="hljs-keyword">this</span>.list;
+}</code></pre>
+<p><strong>Changing padding-right</strong><br>Padding-right is adjusted after each change detection.  </p>
+<p>Note, because of Angular&#39;s checks for feedback loops in change detection, we set the css using <strong>nativeElement</strong>.<br>If we used an Angular mechanism for setting padding-right (e.g <code>[ngStyle]&quot;...&quot;</code>), we would get the exception <strong><em>ExpressionChangedAfterItHasBeenCheckedError</em></strong> </p>
+<pre><code class="language-ts">ngAfterViewChecked() {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.hostConfigOk) {
+    <span class="hljs-keyword">this</span>.calcListPaddingRight();
+  }
+}
+
+calcListPaddingRight() {
+  const scrollIsVisible = <span class="hljs-keyword">this</span>.list.clientHeight &lt; <span class="hljs-keyword">this</span>.list.scrollHeight;
+  <span class="hljs-keyword">this</span>.wrapper.style.paddingRight = scrollIsVisible ? <span class="hljs-string">'0.3em'</span> : <span class="hljs-string">'1em'</span>;
+}</code></pre>

@@ -1,0 +1,16 @@
+{
+  "name": "Migration Workbench",
+  "version": "0.1",
+  "start_url": "/",
+  "orientation": "any",
+  "scope": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/static/cogs.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#fff"
+}

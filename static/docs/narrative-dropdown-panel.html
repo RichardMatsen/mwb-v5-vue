@@ -1,0 +1,74 @@
+<h1 id="thumbnail-dropdown-panel">Thumbnail Dropdown Panel</h1>
+<p>The narrative dropdown feature of the Thumbnail provides help text that is easy to access, but can be hidden from view for a more compact view.</p>
+<p><img src="static/docs/images/NarrativeDropdown.jpg" alt="narrative dropdown"></p>
+<h2 id="feature-a-drop-down-panel-to-display-narrative-text-about-the-metric">Feature: A drop-down panel to display narrative text about the metric</h2>
+<h3 id="requirements">Requirements</h3>
+<ul>
+<li>Small button at the bottom right of the thumbnail</li>
+<li>Change from down-chevron to up-chevron upon toggle</li>
+<li>No button if no narrative text</li>
+<li>Animated open</li>
+</ul>
+<h3 id="implementation"><strong>Implementation</strong></h3>
+<p>Use bootstrap collapse as it is the simplest implementation of show/hide with animation.<br>The narrative text div:  </p>
+<pre><code class="language-javascript">&lt;<span class="hljs-keyword">div</span> [<span class="hljs-built_in">id</span>]=<span class="hljs-string">"'narrtext_'+measure.id"</span> <span class="hljs-built_in">class</span>=<span class="hljs-string">"collapse"</span>&gt;</code></pre>
+<p>The toggle button:</p>
+<pre><code class="language-javascript">&lt;a class=<span class="hljs-string">"narrative-button"</span> <span class="hljs-meta">data</span>-toggle=<span class="hljs-string">"collapse"</span> [<span class="hljs-meta">attr</span><span class="hljs-meta">.data</span>-target]=<span class="hljs-string">"'#narrtext_'+measure.id"</span>&gt;</code></pre>
+<p>Note</p>
+<ul>
+<li>the use of &#39;attr.&#39; prefix on data-target to prevent error <em>&quot;Can&#39;t bind to &#39;data-target&#39; since it isn&#39;t a known property of &#39;a&#39;.&quot;</em></li>
+<li>the data-target id has suffix of measure.id to give each thumbnail a unique reference.</li>
+</ul>
+<h3 id="changing-button-icon"><strong>Changing button icon</strong></h3>
+<p>Can&#39;t use ngIf on the icons because the structural change stops collapse from working.</p>
+<p><strong><em>Does not work</em></strong></p>
+<pre><code class="language-javascript">&lt;i <span class="hljs-class"><span class="hljs-keyword">class</span></span>=<span class="hljs-string">"fa fa-chevron-down"</span> *ngIf=<span class="hljs-string">"!isExpanded"</span> aria-hidden=<span class="hljs-string">"true"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">i</span>&gt;</span></span>
+&lt;i <span class="hljs-class"><span class="hljs-keyword">class</span></span>=<span class="hljs-string">"fa fa-chevron-up"</span> *ngIf=<span class="hljs-string">"isExpanded"</span> aria-hidden=<span class="hljs-string">"true"</span>&gt;<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">i</span>&gt;</span></span></code></pre>
+<p><strong><em>Use ngClass instead:</em></strong></p>
+<pre><code class="language-javascript">[ngClass] = <span class="hljs-string">"{ 'fa-chevron-down': !isExpanded, 'fa-chevron-up': isExpanded }"</span><span class="hljs-comment">;</span></code></pre>
+<h3 id="click-event"><strong>Click event</strong></h3>
+<p>Simplest implementation is to give the button the attribute <code>(click)=&quot;this.isExpanded = !this.isExpanded&quot;</code>.</p>
+<p>Can also use click method with <code>(click)=&quot;click()&quot;</code> on button and method of</p>
+<pre><code class="language-javascript">click() {
+  <span class="hljs-keyword">this</span>.isExpanded = !<span class="hljs-keyword">this</span>.isExpanded;
+}  </code></pre>
+<p>Can also use @HostListener decorator for more complex scenario:</p>
+<pre><code class="language-javascript"><span class="hljs-meta">@HostListener(<span class="hljs-meta-string">'click'</span>, [<span class="hljs-meta-string">'$event'</span>])</span>
+clickHandler(event) {
+  const narText = <span class="hljs-keyword">this</span>.elementRef.nativeElement.querySelector(<span class="hljs-string">'#narrtext_'</span>+<span class="hljs-keyword">this</span>.measure.id); <span class="hljs-comment">// Ref to affected div</span>
+  const isOpen = narText.classList.contains(<span class="hljs-string">'in'</span>);                                           <span class="hljs-comment">// Query class</span>
+  <span class="hljs-keyword">this</span>.isExpanded = !<span class="hljs-keyword">this</span>.isExpanded;
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;  <span class="hljs-comment">// chain to next handler</span>
+}</code></pre>
+<p>Note <code>return true</code> on clickhandler() allows other click events to happen (if they exist).<br>Chaining isn&#39;t available with the simple declarative click event above.</p>
+<h3 id="placing-the-button"><strong>Placing the button</strong></h3>
+<p>Initially used absolute positioning and offset from the corner,<br>but this <strong><em>behaves erratically at different media settings and browsers</em></strong>.</p>
+<pre><code class="language-javascript">  <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.narrative-button</span> {
+    <span class="hljs-attribute">position</span>:absolute;
+    <span class="hljs-attribute">bottom</span>: <span class="hljs-number">20px</span>;
+    <span class="hljs-attribute">right</span>: <span class="hljs-number">20px</span>;
+    <span class="hljs-attribute">cursor</span>: pointer;
+  }
+  @<span class="hljs-keyword">media</span> only screen and (max-width: <span class="hljs-number">768px</span>) {
+    <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.narrative-button</span> {
+      <span class="hljs-attribute">bottom</span>: <span class="hljs-number">0</span>;
+    }
+  }</code></pre>
+<p>Using <strong>flexbox</strong> proves to be reliable across all screen widths and all browsers.</p>
+<pre><code class="language-javascript"><span class="hljs-selector-tag">div</span><span class="hljs-selector-class">.well</span> {
+  <span class="hljs-attribute">justify-content</span>: space-between;
+  <span class="hljs-attribute">flex-direction</span>: column;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">100vh</span>;  
+  <span class="hljs-attribute">display</span>: flex;
+}
+<span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.narrative-button</span> {
+  <span class="hljs-attribute">justify-content</span>: flex-end;
+  <span class="hljs-attribute">display</span>: flex;
+  <span class="hljs-attribute">cursor</span>: pointer;
+}</code></pre>
+<h3 id="refs">Refs</h3>
+<ul>
+<li><a href="https://stackoverflow.com/a/43145082/8745435">Align button at the bottom of div using CSS</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox">Basic concepts of flexbox</a></li>
+<li><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">A Complete Guide to Flexbox</a></li>
+</ul>

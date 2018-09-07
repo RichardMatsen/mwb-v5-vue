@@ -1,6 +1,6 @@
 # MWB - Data Migration Workbench
 
-![dashboard](static/docs/images/dashboard.jpg)
+![dashboard](https://github.com/RichardMatsen/mwb-v5-vue/blob/master/static/docs/images/Dashboard.jpg)
 
 ## **Application Overview**
 

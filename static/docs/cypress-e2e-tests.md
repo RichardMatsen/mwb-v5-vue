@@ -2,7 +2,7 @@
 
 The Cypress testing framework is more user friendly than the Protractor/Karma/Selenium tools provided with Angular.
 
-![Cypress testing](./images/CypressDashboardTest.jpg)
+![Cypress testing](./images/cypress-dashboard-test.jpg)
 
 ## Why Cypress
 

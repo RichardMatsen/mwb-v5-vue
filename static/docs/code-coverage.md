@@ -1,3 +1,3 @@
-## Code Coverage Report
+# Code Coverage Report
 
 ![code coverage](./images/coverage.jpg)

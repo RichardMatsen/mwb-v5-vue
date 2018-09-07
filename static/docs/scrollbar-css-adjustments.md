@@ -1,6 +1,6 @@
 # Scrollbar CSS Adjustments
 
-![narrative dropdown](./images/Scrollbar_CSS_Adjustment.jpg)
+![narrative dropdown](./images/scrollbar_css_adjustment.jpg)
 
 The file-list component is a wrapper for a listbox, with the following features on the scroll bar:
 

@@ -1,5 +1,5 @@
 
-## Functional Issues
+# Functional Issues
 
 - Some of the Linqpad output html has event handlers linked to javascript that does not exist, or does not work inside the Angular app.
 
@@ -13,7 +13,7 @@ e.g
     </a>
 ```
 
-## Browser Issues
+# Browser Issues
 
 - Moz, Edge - scrollbar styling not working (https://css-tricks.com/forums/topic/css-tags-for-mozilla-browser-to-style-scrollbar/)
 

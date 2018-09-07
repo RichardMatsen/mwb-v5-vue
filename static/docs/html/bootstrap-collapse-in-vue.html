@@ -13,13 +13,13 @@
   Use: v-show=&quot;isExpanded&quot; as hook for animation.
   Note, no animation on the height of the well.
   Works ok, but can be simplified by removing bootstrap collapse.</p>
-<p>Final soultion:
+<p>Final solution:
   Remove collapse from target div (narrative text + hr).
   Use &lt;transition name=&quot;slide-fade&quot; type=&quot;animation&quot; @enter=&quot;heightEnterAnimation&quot; @leave=&quot;heightLeaveAnimation&quot;&gt; wrapper around target div.
   Use: v-show=&quot;isExpanded&quot; as hook for animation.
   Use the following animation css:</p>
 <pre><code><span class="hljs-selector-class">.slide-fade-enter</span> {
-  <span class="hljs-comment">/* tranform: translateY(20px); */</span> 
+  <span class="hljs-comment">/* transform: translateY(20px); */</span> 
   <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
 }
 <span class="hljs-selector-class">.slide-fade-enter-active</span> {

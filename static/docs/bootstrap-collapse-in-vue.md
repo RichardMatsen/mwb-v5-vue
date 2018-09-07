@@ -18,14 +18,14 @@ First attempt mixing Vue transition directive and Bootstrap collapse/in classes:
   Note, no animation on the height of the well.
   Works ok, but can be simplified by removing bootstrap collapse.
 
-Final soultion:
+Final solution:
   Remove collapse from target div (narrative text + hr).
   Use <transition name="slide-fade" type="animation" @enter="heightEnterAnimation" @leave="heightLeaveAnimation"> wrapper around target div.
   Use: v-show="isExpanded" as hook for animation.
   Use the following animation css:
 
     .slide-fade-enter {
-      /* tranform: translateY(20px); */ 
+      /* transform: translateY(20px); */ 
       opacity: 0;
     }
     .slide-fade-enter-active {

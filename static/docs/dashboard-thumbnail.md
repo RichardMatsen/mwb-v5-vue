@@ -2,7 +2,7 @@
 
 Dashboard thumbnails are the key component for the dashboard view.
 
-![dashboard thumbnail](./images/DashboardThumbnail.jpg)
+![dashboard thumbnail](./images/dashboard-thumbnail.jpg)
 
 ## Features
 

@@ -2,7 +2,7 @@
 
 The narrative dropdown feature of the Thumbnail provides help text that is easy to access, but can be hidden from view for a more compact view.
 
-![narrative dropdown](images/NarrativeDropdown.jpg)
+![narrative dropdown](images/narrative-dropdown.jpg)
 
 ## Feature: A drop-down panel to display narrative text about the metric
 

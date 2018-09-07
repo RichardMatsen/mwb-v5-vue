@@ -1,6 +1,6 @@
 # MWB - Data Migration Workbench
 
-![dashboard](./static/docs/images/dashboard.jpg)
+![dashboard](static/docs/images/dashboard.jpg)
 
 ## **Application Overview**
 

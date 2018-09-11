@@ -16,7 +16,7 @@ describe('Dashboard Page', () => {
 
   before(function () {
     cy.viewport((3000 / 1.5), (2000 / 1.5))
-    cy.visit('localhost:8080')
+    cy.visit('localhost:8080').contains('99.53%')
   })
 
   context('static features', function () {
@@ -268,7 +268,7 @@ describe('Dashboard Page', () => {
 
       beforeEach(() => {
         cy.viewport((3000 / 1.5), (2000 / 1.5))
-        cy.visit('localhost:8080')
+        cy.visit('localhost:8080').contains('99.53%')
       })
 
       it('thumbnails should navigate', () => {

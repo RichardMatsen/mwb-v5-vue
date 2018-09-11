@@ -3,8 +3,12 @@
 describe('Search', () => {
 
   const getPage = () => {
-    cy.viewport((3000/1.5), (2000/1.5))
-    cy.visit('localhost:8080/validations')
+    cy.viewport((3000 / 1.5), (2000 / 1.5))
+    cy.visit('localhost:8080/validations', {
+      onLoad(win) {
+        console.log('loaded', win.myApp) // for debugging app state etc
+      }
+    })
     cy.wait(100)
   }
 
@@ -28,7 +32,7 @@ describe('Search', () => {
       cy.get('#searchTerm').type('diagnosis')
       cy.get('mark.markSearch').should('have.length', 2)
     })
-  })  
+  })
 
   context('when search term is cleared', () => {
 
@@ -49,7 +53,7 @@ describe('Search', () => {
       cy.get('.reset').click()
       cy.get('mark.markSearch').should('have.length', 0)
     })
-  })  
+  })
 
   context('when search button is clicked', () => {
 
@@ -71,6 +75,6 @@ describe('Search', () => {
       cy.get('div.file-list span.fa-stack.search-indicator').should('have.length', 2)
     })
 
-  })  
+  })
 
 })

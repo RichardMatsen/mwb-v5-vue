@@ -30,6 +30,7 @@ const clearResults = (pageType) => {
   })
   store.commit('SET_SEARCHTERM', '')
   store.commit('SET_RESULTS', [])
+  store.commit('SET_MATCHCOUNT', 0)
 }
 
 const searchFile = (file, searchTerm) => {

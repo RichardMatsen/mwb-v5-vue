@@ -8,10 +8,11 @@ describe('Migration Workbench App Page', () => {
 
   before(function () {
     cy.visit('localhost:8080', {
-      onLoad(win) {
-        console.log('loaded', win)
-      }
-    })
+        onLoad(win) {
+          console.log('loaded', win)
+        }
+      })
+      .contains('99.53%')
   })
 
   it("throws when a non-descendent element is covering subject", (done) => {

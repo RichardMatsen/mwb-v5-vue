@@ -1,11 +1,17 @@
 /* eslint-disable no-undef */
-import { 
-  colorMap, getColor_rgba, getColorClass,
+import {
+  colorMap,
+  getColor_rgba,
+  getColorClass,
 } from './color-utils'
 
-import { 
-  getSelector, elementVerticalCenter, areAligned,
-  isLeftJustified, isRightJustified, areVerticallyCenterAligned
+import {
+  getSelector,
+  elementVerticalCenter,
+  areAligned,
+  isLeftJustified,
+  isRightJustified,
+  areVerticallyCenterAligned
 } from './layout-utils'
 
 export function page_common_e2e(testParams, runtimeConfig) {
@@ -13,16 +19,16 @@ export function page_common_e2e(testParams, runtimeConfig) {
   describe(testParams.testName, () => {
 
     const getPage = () => {
-      cy.viewport((3000/1.5), (2000/1.5))
+      cy.viewport((3000 / 1.5), (2000 / 1.5))
       cy.visit(testParams.pageUrl)
       if (testParams.pageWait) cy.wait(testParams.pageWait)
     }
 
-    before(function(){
+    before(function () {
       getPage()
     })
 
-    context('static features', function(){
+    context('static features', function () {
 
       describe('title area', () => {
 
@@ -38,7 +44,7 @@ export function page_common_e2e(testParams, runtimeConfig) {
           cy.get('.search').should('be.visible')
         });
       });
-        
+
       describe('file list', () => {
 
         it('should have title text', () => {
@@ -49,7 +55,7 @@ export function page_common_e2e(testParams, runtimeConfig) {
           cy.get('.file-list-item').should('have.length', testParams.countFilelist)
         });
       });
-    
+
       describe('file list items', () => {
 
         it('should have file title text', () => {
@@ -80,13 +86,13 @@ export function page_common_e2e(testParams, runtimeConfig) {
             })
         })
       });
-      
+
       describe('file list limiter', () => {
 
         it('should show a limited list of files', () => {
           cy.get('.file-list-item').should('have.length', testParams.countFilelist)
         });
-    
+
         it('should have a show-more icon to display more items', () => {
           cy.get('span.moreChevron').should('be.visible')
         });
@@ -117,7 +123,7 @@ export function page_common_e2e(testParams, runtimeConfig) {
           });
 
         });
-    
+
         describe('refresh button', () => {
 
           it('should have a refresh button', () => {
@@ -127,7 +133,7 @@ export function page_common_e2e(testParams, runtimeConfig) {
           it('should have last refreshed text', () => {
             cy.get('div.result .last-refresh-label')
               .should('contain', 'Refreshed')
-              .should( function($el) {
+              .should(function ($el) {
                 expect($el[0].innerText.length).to.be.greaterThan(9)
               })
           });
@@ -145,16 +151,19 @@ export function page_common_e2e(testParams, runtimeConfig) {
         });
 
       });
-        
+
     })
 
-    context('layout', function(){
+    context('layout', function () {
 
       describe('title area', () => {
 
         describe('pageTitle', () => {
           it('should be left-justified', () => {
-            isLeftJustified({ subject: '.pageTitle', relativeTo: '.bannertitle' })
+            isLeftJustified({
+              subject: '.pageTitle',
+              relativeTo: '.bannertitle'
+            })
           })
         })
 
@@ -164,16 +173,25 @@ export function page_common_e2e(testParams, runtimeConfig) {
             cy.get('body').selectorsAreOrdered(selectors)
           });
           it('should be left-justified', () => {
-            isLeftJustified({ subject: '.pageDescription', relativeTo: '.bannertitle' })
+            isLeftJustified({
+              subject: '.pageDescription',
+              relativeTo: '.bannertitle'
+            })
           })
         })
 
         describe('search', () => {
           it('should be vertically center-aligned to the page title', () => {
-            areVerticallyCenterAligned({ subjects: ['.pageTitle', '.search'], within: '.bannertitle' })
+            areVerticallyCenterAligned({
+              subjects: ['.pageTitle', '.search'],
+              within: '.bannertitle'
+            })
           })
           it('should be right-justified', () => {
-            isRightJustified({ subject: '.search', relativeTo: '.bannertitle' })
+            isRightJustified({
+              subject: '.search',
+              relativeTo: '.bannertitle'
+            })
           })
         })
 
@@ -181,63 +199,68 @@ export function page_common_e2e(testParams, runtimeConfig) {
 
       describe('file list', () => {
         it('should be left-justified', () => {
-          isLeftJustified({ subject: '.filelistcontainer', relativeTo: '#filecontent' })
+          isLeftJustified({
+            subject: '.filelistcontainer',
+            relativeTo: '#filecontent'
+          })
         })
       })
 
       describe('result', () => {
         it('should be right-justified', () => {
-          isRightJustified({ subject: '.result', relativeTo: '#filecontent' })
+          isRightJustified({
+            subject: '.result',
+            relativeTo: '#filecontent'
+          })
         })
       })
 
     })
 
-    context('actions', function(){
+    context('actions', function () {
 
       beforeEach(() => {
         getPage();
       });
 
-    describe('file list limiter', () => {
+      describe('file list limiter', () => {
 
         describe('when show-more icon is clicked', () => {
-    
+
           it('should display more items', () => {
             cy.get('span.moreChevron').should('be.visible').click()
             cy.wait(300)
             cy.get('.file-list-item').should('have.length', testParams.countAfterMoreChevronClick)
           });
         });
-    
+
         describe('when there are no more items to display', () => {
-    
+
           it('should disable the show-more icon', () => {
             cy.get('span.moreChevron').should('not.be.disabled')
 
             var i;
-            for (i = 0; i < testParams.timesToClickUntilAllDisplayed; i++) { 
+            for (i = 0; i < testParams.timesToClickUntilAllDisplayed; i++) {
               cy.get('span.moreChevron').should('be.visible').click()
               cy.wait(100)
             }
             cy.get('span.moreChevron.disabled')
           });
         });
-    
+
       });
 
       describe('file display', () => {
-    
+
         describe('when refresh button is clicked', () => {
 
           it('should update last refreshed text', () => {
-            cy.get('.last-refresh-label span').eq(1).then(spans => {
+            cy.get('.last-refresh-label span').contains(':').then(spans => {
               const before = spans[0].textContent;
               expect(before.length).to.be.above(0);
               cy.wait(1000)
               cy.get('.refresh-page-button > .fa').click()
-              cy.wait(200)
-              cy.get('.last-refresh-label span').eq(1).then(spans => {
+              cy.get('.last-refresh-label span').should('not.contain', before).then(spans => {
                 const after = spans[0].textContent;
                 expect(after.length).to.be.above(0);
                 expect(before).not.to.eq(after);

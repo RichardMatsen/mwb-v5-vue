@@ -4,7 +4,7 @@ describe('Navigating to Tasks Page', () => {
 
   describe('navigating to, when user is not logged in', () => {
     it('should redirect to login page', () => {
-      cy.visit('localhost:8080')
+      cy.visit('localhost:8080').contains('99.53%')
       cy.get('a[href*="tasks"]').contains('Team Tasks').click()
       cy.wait(2000)
       cy.get('h1').contains('Login')

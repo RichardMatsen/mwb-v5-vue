@@ -25,6 +25,76 @@
   </div>
 </template>
 
+<script>
+import Vue from "vue";
+
+export default {
+  name: "about",
+  data() {
+    return {
+      docs: [
+        "overview.html",
+        "code-coverage.html",
+        "cypress-e2e-tests.html",
+        "measure-calculation.html",
+        "dashboard-thumbnail.html",
+        "narrative-dropdown-panel.html",
+        "scrollbar-css-adjustments.html",
+        "bootstrap-collapse-in-vue.html",
+        "search.component-tests.html",
+        "issues.html",
+        "npm-audit.html"
+      ],
+      currentDoc: null
+    };
+  },
+  created() {
+    this.structureDocs();
+    this.docs.forEach(this.loadDoc);
+  },
+  methods: {
+    structureDocs() {
+      this.docs = this.docs.map(name => {
+        return { name, html: "", isCollapsed: true };
+      });
+    },
+    loadDoc(doc) {
+      const url = `../docs/${doc.name}`;
+      return Vue.http
+        .get(url)
+        .then(response => {
+          doc.html = response.body;
+        })
+        .catch(err => console.error("getFile() failed", err));
+    },
+    selectDoc(index, event) {
+      this.docs[index].isCollapsed = event.isCollapsed;
+      this.scrollToTopWhenCollapsing(event.isCollapsed, index);
+      this.setCurrentDoc(event.isCollapsed, index);
+    },
+    scrollToTopWhenCollapsing(isCollapsed, index) {
+      if (isCollapsed) {
+        const docDiv = this.$el.querySelector("#doc" + index);
+        docDiv.scrollTop = 0;
+      }
+    },
+    setCurrentDoc(isCollapsed, index) {
+      if (!isCollapsed) {
+        this.currentDoc = this.docs[index];
+      }
+    },
+    closeDoc() {
+      this.currentDoc.isCollapsed = true;
+      this.currentDoc = null;
+    }
+  },
+  computed: {
+    allCollapsed() {
+      return !this.docs.some(d => d.isCollapsed);
+    }
+  }
+};
+</script>
 <style src="highlight.js/styles/default.css">
 </style>
 <style scoped>
@@ -92,73 +162,3 @@ button.close {
 }
 </style>
 
-<script>
-import Vue from "vue";
-
-export default {
-  name: "about",
-  data() {
-    return {
-      docs: [
-        "Overview.html",
-        "code-coverage.html",
-        "cypress-e2e-tests.html",
-        "measure-calculation.html",
-        "dashboard-thumbnail.html",
-        "narrative-dropdown-panel.html",
-        "scrollbar-css-adjustments.html",
-        "Bootstrap collapse in Vue.html",
-        "search.component-tests.html",
-        "issues.html",
-        "npm-audit.html"
-      ],
-      currentDoc: null
-    };
-  },
-  created() {
-    this.structureDocs();
-    this.docs.forEach(this.loadDoc);
-  },
-  methods: {
-    structureDocs() {
-      this.docs = this.docs.map(name => {
-        return { name, html: "", isCollapsed: true };
-      });
-    },
-    loadDoc(doc) {
-      const url = `../docs/${doc.name}`;
-      return Vue.http
-        .get(url)
-        .then(response => {
-          doc.html = response.body;
-        })
-        .catch(err => console.error("getFile() failed", err));
-    },
-    selectDoc(index, event) {
-      this.docs[index].isCollapsed = event.isCollapsed;
-      this.scrollToTopWhenCollapsing(event.isCollapsed, index);
-      this.setCurrentDoc(event.isCollapsed, index);
-    },
-    scrollToTopWhenCollapsing(isCollapsed, index) {
-      if (isCollapsed) {
-        const docDiv = this.$el.querySelector("#doc" + index);
-        docDiv.scrollTop = 0;
-      }
-    },
-    setCurrentDoc(isCollapsed, index) {
-      if (!isCollapsed) {
-        this.currentDoc = this.docs[index];
-      }
-    },
-    closeDoc() {
-      this.currentDoc.isCollapsed = true;
-      this.currentDoc = null;
-    }
-  },
-  computed: {
-    allCollapsed() {
-      return !this.docs.some(d => d.isCollapsed);
-    }
-  }
-};
-</script>

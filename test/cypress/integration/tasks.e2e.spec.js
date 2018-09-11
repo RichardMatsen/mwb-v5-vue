@@ -44,10 +44,6 @@ describe('Tasks Page', () => {
       cy.get('.list_title').arrayContains(['Unassigned', 'In Progress', 'Waiting', 'Done'])
     });
 
-    // it.only('should have new card links', () => {
-    //   cy.get('.list__newcard').count(4)
-    // });
-
     it('should have cards', () => {
       cy.get('.mwb-kanban-card').count(2)
       cy.get('.mwb-kanban-card').arrayContains(['validations 07 Jun', 'validations 06 Jun Sam'])
@@ -70,10 +66,10 @@ describe('Tasks Page', () => {
 
         // Draggable
         cy.get('.mwb-kanban-list').eq(0).within(els => {
-          cy.root().get('.mwb-kanban-card')  
+          cy.root().get('.mwb-kanban-card')
             .as('draggable')
         })
-        cy.get('@draggable').should('have.class', 'drag-item', 'true') 
+        cy.get('@draggable').should('have.class', 'drag-item', 'true')
 
         /*
           Drag and drop test.
@@ -82,14 +78,25 @@ describe('Tasks Page', () => {
         */
         const dt = {
           types: [],
-          setData: function(prop, val) { this[prop] = val},
-          getData: function(prop) { return this[prop] }
+          setData: function (prop, val) {
+            this[prop] = val
+          },
+          getData: function (prop) {
+            return this[prop]
+          }
         }
         cy.get('@draggable')
-          .trigger('mousedown', { which: 1 })
-          .trigger('mousemove', { clientX: 300, clientY: 300 })
-          .wait(500)  // pause for effect
-          .trigger('mouseup', {force: true})
+          .trigger('mousedown', {
+            which: 1
+          })
+          .trigger('mousemove', {
+            clientX: 300,
+            clientY: 300
+          })
+          .wait(500) // pause for effect
+          .trigger('mouseup', {
+            force: true
+          })
 
         // Check 2 cards on 2nd list
         cy.get('.mwb-kanban-list').eq(1).within(els => {

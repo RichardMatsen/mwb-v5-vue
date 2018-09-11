@@ -1,8 +1,13 @@
 /* eslint-disable no-undef */
 import flushPromises from 'flush-promises'
 
-import { store } from '@/store/store'
-import { mutations, actions } from '@/store/modules/load-status.store'
+import {
+  store
+} from '@/store/store'
+import {
+  mutations,
+  actions
+} from '@/store/modules/load-status.store'
 
 describe('store', () => {
 
@@ -14,8 +19,8 @@ describe('store', () => {
       calls.forEach(call => {
         it(call, () => {
           const state = {}
-          const payload = { 
-            resource: 'someResource', 
+          const payload = {
+            resource: 'someResource',
             status: 'someStatus'
           }
           mutations[call](state, payload)
@@ -28,7 +33,10 @@ describe('store', () => {
 
       let context, options, result
       beforeEach(() => {
-        context = { commit: {}, state: {} }  // same properties as store
+        context = {
+          commit: {},
+          state: {}
+        } // same properties as store
         options = {
           resource: 'someResource',
           fetch: () => Promise.resolve('someValue'),
@@ -45,23 +53,23 @@ describe('store', () => {
       })
       afterEach(() => {
         store.commit.restore()
-        if(options.fetch && options.fetch.restore) {
+        if (options.fetch && options.fetch.restore) {
           options.fetch.restore()
         }
-        if(options.fail && options.fail.restore) {
+        if (options.fail && options.fail.restore) {
           options.fail.restore()
         }
       })
 
       describe('waitForFetch', () => {
 
-        describe('resource is NOT already loaded and NOT loading', () => {
+        describe('when resource is NOT already loaded and NOT loading', () => {
 
           describe('when fetch succeeds', () => {
             beforeEach(() => {
               context.state.someResource = null
             })
-            beforeEach(async() => {
+            beforeEach(async () => {
               result = actions.waitForFetch(context, options)
               await flushPromises
             })
@@ -90,17 +98,17 @@ describe('store', () => {
 
           describe('when fetch fails', () => {
             let result
-            beforeEach(async() => {
+            beforeEach(async () => {
               options.fetch = () => Promise.reject('someValue')
               result = actions.waitForFetch(context, options)
               await flushPromises
             })
-            it('should call fail method passed in', async() => {
+            it('should call fail method passed in', async () => {
               result.catch(x => {
                 expect(failSpy).to.be.called
               })
             })
-            it('should call store ON_FAIL', async() => {
+            it('should call store ON_FAIL', async () => {
               result.catch(x => {
                 expect(commitStub).to.be.calledWith('ON_FAIL')
               })
@@ -108,13 +116,13 @@ describe('store', () => {
           })
 
         })
-        
-        describe('resource is already loaded', () => {
+
+        describe('when resource is already loaded', () => {
 
           beforeEach(() => {
             context.state.someResource = 'loaded...'
           })
-          beforeEach(async() => {
+          beforeEach(async () => {
             result = actions.waitForFetch(context, options)
             await flushPromises
           })
@@ -129,23 +137,23 @@ describe('store', () => {
           })
           it('should resolve to "already loaded"', () => {
             result.then(val => {
-              expect(val).to.equal('already loaded')
-            })
-            .catch(err => console.log(err))
+                expect(val).to.equal('already loaded')
+              })
+              .catch(err => console.log(err))
           })
 
         })
 
-        describe('resource is already loading but NOT loaded', () => {
+        describe('when resource is already loading but NOT loaded', () => {
 
           beforeEach(() => {
             context.state.someResource = 'loading'
           })
-          beforeEach(async() => {
+          beforeEach(async () => {
             result = actions.waitForFetch(context, options)
             await flushPromises
           })
-    
+
           describe('when prior fetch succeeds', () => {
             beforeEach(() => {
               // Simulate prior fetch succeeding
@@ -170,7 +178,7 @@ describe('store', () => {
               })
             })
             it('should resolve to "loaded"', (done) => {
-              setTimeout(function() {
+              setTimeout(function () {
                 result.then(val => {
                   expect(val).to.equal('loaded')
                   done()
@@ -188,7 +196,7 @@ describe('store', () => {
               result.catch(err => {
                 expect(fetchSpy).not.to.be.called
                 done()
-              }) 
+              })
             })
             it('should NOT call store ON_FETCHING', (done) => {
               result.catch(err => {
@@ -198,7 +206,7 @@ describe('store', () => {
             })
             it('should NOT call store ON_FETCH', (done) => {
               result.catch(err => {
-                expect(commitStub).not.to.be.called 
+                expect(commitStub).not.to.be.called
                 done()
               })
             })
@@ -219,4 +227,3 @@ describe('store', () => {
     })
   })
 })
-    

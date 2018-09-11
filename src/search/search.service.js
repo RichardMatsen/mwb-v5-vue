@@ -1,4 +1,6 @@
-import { store } from '@/store/store'
+import {
+  store
+} from '@/store/store'
 import Mark from 'mark.js'
 
 const getResults = (searchTerm, pageType) => {
@@ -7,8 +9,13 @@ const getResults = (searchTerm, pageType) => {
 
   const results = visibleFiles
     .filter(file => searchFile(file, searchTerm))
-    .map(file => { return { file, count: file.search.count } })
-  
+    .map(file => {
+      return {
+        file,
+        count: file.search.count
+      }
+    })
+
   if (results && results.length) {
     store.commit('SET_RESULTS', results)
   } else {
@@ -42,7 +49,10 @@ const getMatches = (file, searchTerm) => {
   const div = document.createElement('div')
   div.innerHTML = file.content
   const instance = new Mark(div);
-  instance.mark(searchTerm, { done: (matchCount) => count = matchCount })
+  instance.mark(searchTerm, {
+    separateWordSearch: false,
+    done: (matchCount) => count = matchCount
+  })
   return count
 }
 

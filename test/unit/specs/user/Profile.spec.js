@@ -2,20 +2,33 @@
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
-import { mount, shallow, createLocalVue, cloneDeep } from '@vue/test-utils'
+import {
+  mount,
+  shallow,
+  createLocalVue,
+  cloneDeep
+} from '@vue/test-utils'
 
 import Profile from '@/user/Profile.vue'
-import { store } from '@/store/store'
+import {
+  store
+} from '@/store/store'
 import router from '@/router/routes'
-import { interceptor } from '@/testing-utils/test-interceptor'
-import { createMockStore } from '@/testing-utils/test-store'
+import {
+  interceptor
+} from '@/testing-utils/test-interceptor'
+import {
+  createMockStore
+} from '@/testing-utils/test-store'
 
 const localVue = createLocalVue()
 localVue.use(VueRouter)
 localVue.use(Vuex)
 localVue.use(VueResource)
 
-let currentUser =  { userName: 'Smith' }
+let currentUser = {
+  userName: 'Smith'
+}
 
 let mockStore, mockedServices, mountOptions, wrapper
 let routerStub, stateStub, storeCommitStub
@@ -33,12 +46,14 @@ describe('User', () => {
     const setup = () => {
       routerStub = sinon.stub(router, 'push')
       stateStub = sinon.stub(store, 'state')
-      mockStore = createMockStore('somePage', {currentUser})
+      mockStore = createMockStore('somePage', {
+        currentUser
+      })
       mountOptions = {
-        store: mockStore, 
+        store: mockStore,
         router: router,
         localVue,
-        propsData: { }
+        propsData: {}
       }
       storeCommitStub = sinon.stub(mockStore, 'commit')
       wrapper = shallow(Profile, mountOptions)
@@ -51,13 +66,13 @@ describe('User', () => {
       }
     }
 
-    beforeEach( () => {
+    beforeEach(() => {
       setup()
     });
     afterEach(() => {
       teardown()
     })
-    
+
     it('should initialize the component', () => {
       expect(wrapper.vm).to.be.ok
     })
@@ -73,7 +88,7 @@ describe('User', () => {
       describe('cancel()', () => {
         it('should redirect to home page', () => {
           wrapper.vm.cancel()
-          expect(routerStub).to.be.calledWith('/')
+          expect(routerStub).to.be.calledWith('/dashboard')
         })
       })
       describe('logout()', () => {
@@ -83,7 +98,7 @@ describe('User', () => {
         })
         it('should redirect to home page', () => {
           wrapper.vm.logout()
-          expect(routerStub).to.be.calledWith('/')
+          expect(routerStub).to.be.calledWith('/dashboard')
         })
       })
     })
@@ -98,16 +113,16 @@ describe('User', () => {
 
       describe('when user is NOT logged in', () => {
 
-        beforeEach( () => {
-          teardown()          // unwrap stubs
-          currentUser = null  // change store element
-          setup()             // rebuild fixture
+        beforeEach(() => {
+          teardown() // unwrap stubs
+          currentUser = null // change store element
+          setup() // rebuild fixture
         });
 
         it('should redirect to Login page', () => {
           expect(routerStub).to.be.calledWith('/login?returnUrl=/profile')
         })
-  
+
       })
     })
   });

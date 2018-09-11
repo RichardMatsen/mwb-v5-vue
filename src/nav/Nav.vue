@@ -60,9 +60,6 @@ export default {
     })
   },
   computed: {
-    // docsPanelIsOpen() {
-    //   return this.$store.state.ui.docsPanelIsOpen
-    // },
     currentUser() {
       return this.$store.state.user.currentUser
     },

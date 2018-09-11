@@ -1,8 +1,7 @@
-// import { store } from '../store/store'
 import filesByDateService from './files-by-date.service'
 
 export default {
-  clinicsHistory (files) {
+  clinicsHistory(files) {
     const data = files
       .filter(f => f.metric)
       .map(f => (+f.metric.replace('%', '')));
@@ -12,18 +11,20 @@ export default {
       .reverse();
     return history
   },
-  
-  validationsHistory (files) {
+
+  validationsHistory(files) {
     return files
       .filter(f => f.metric)
       .map(f => f.metric)
       .reverse()
   },
-  
-  referentialsHistory (files) {
+
+  referentialsHistory(files) {
     return filesByDateService.filesByDate(files)
       .map(x => {
-        return x.files.reduce((total, file) => { return total + (file.metric || 0) }, 0)
+        return x.files.reduce((total, file) => {
+          return total + (file.metric || 0)
+        }, 0)
       }).reverse()
   }
 }

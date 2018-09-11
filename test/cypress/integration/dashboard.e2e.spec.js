@@ -1,23 +1,27 @@
 /* eslint-disable no-undef */
 
-import { 
-  colorMap, getColor_rgba, getColorClass,
+import {
+  colorMap,
+  getColor_rgba,
+  getColorClass,
 } from '../support/color-utils'
 
-import { 
-  getSelector, elementVerticalCenter, areAligned
+import {
+  getSelector,
+  elementVerticalCenter,
+  areAligned
 } from '../support/layout-utils'
 
 describe('Dashboard Page', () => {
 
-  before(function(){
-    cy.viewport((3000/1.5), (2000/1.5))
+  before(function () {
+    cy.viewport((3000 / 1.5), (2000 / 1.5))
     cy.visit('localhost:8080')
   })
 
-  context('static features', function(){
+  context('static features', function () {
 
-    context('Dashboard', function(){
+    context('Dashboard', function () {
 
       it('should display Dashboard title', () => {
         cy.get('div.dashboard h1').should('contain', 'Dashboard')
@@ -38,12 +42,36 @@ describe('Dashboard Page', () => {
 
     context('thumbnails', () => {
 
-      const expected = [
-        {title: 'Code Validations', icon: 'fa-check-square-o', badgeValue: '0', color: 'green'},
-        {title: 'Referential Integrity', icon: 'fa-list-ol', badgeValue: '31285', color: 'red'},
-        {title: 'Clinic Matching', icon: 'fa-medkit', badgeValue: '99.53%', color: 'green'},
-        {title: 'Loading Exceptions', icon: 'fa-exclamation-triangle', badgeValue: '242', color: 'orange'},
-        {title: 'Team Tasks', icon: 'fa-cogs', badgeValue: '23', color: 'blue'},
+      const expected = [{
+          title: 'Code Validations',
+          icon: 'fa-check-square-o',
+          badgeValue: '0',
+          color: 'green'
+        },
+        {
+          title: 'Referential Integrity',
+          icon: 'fa-list-ol',
+          badgeValue: '31285',
+          color: 'red'
+        },
+        {
+          title: 'Clinic Matching',
+          icon: 'fa-medkit',
+          badgeValue: '99.53%',
+          color: 'green'
+        },
+        {
+          title: 'Loading Exceptions',
+          icon: 'fa-exclamation-triangle',
+          badgeValue: '242',
+          color: 'orange'
+        },
+        {
+          title: 'Team Tasks',
+          icon: 'fa-cogs',
+          badgeValue: '23',
+          color: 'blue'
+        },
       ];
       const getText = el => el.textContent.trim()
 
@@ -71,43 +99,18 @@ describe('Dashboard Page', () => {
 
       describe('badges', () => {
 
-        /*
-          Refactor these tests to take advantage of Cypress command automatic retry.
-          The retry has limitations - it will only retry a cy command that is directly associated with an assertion.
-          Also, it will not retry assertions made within a 'then' command.
-          Instead, can use 'should('satisfy', ...) - see it('should have badge color rgba values')
-        */
-
-        // it('should have badge value', () => {
-        //   cy.get('.thumbnail .badge').then(els => {
-        //     const badges = [...els].map(getText)
-        //     expect(badges).to.deep.eq(expected.map(x => x.badgeValue))
-        //   })
-        // });
         it('should have badge value', () => {
           expected.map(x => x.badgeValue).forEach((value, i) => {
             cy.get('.thumbnail .badge').eq(i).should('contain', value)
           })
         });
 
-        // it('should have badge color css values', () => {
-        //   cy.get('.thumbnail .badge').then(els => {
-        //     const colors = [...els].map(getColorClass)
-        //     expect(colors).to.deep.eq(expected.map(x => x.color))
-        //   })
-        // });
         it('should have badge color css values', () => {
           expected.map(x => x.color).forEach((color, i) => {
             cy.get('.thumbnail .badge').eq(i).should('have.class', color)
           })
         });
-  
-        // it('should have badge color rgba values', () => {
-        //   cy.get('.thumbnail .badge').then(els => {
-        //     const colors = [...els].map(getColor_rgba)
-        //     expect(colors).to.deep.eq(expected.map(x => x.color))
-        //   })
-        // });
+
         it('should have badge color rgba values', () => {
           expected.map(x => x.color).forEach((color, i) => {
             cy.get('.thumbnail .badge').eq(i).should('satisfy', (el) => getColor_rgba(el[0]) == color)
@@ -127,10 +130,10 @@ describe('Dashboard Page', () => {
             expect(icons).to.deep.eq(Array(4).fill('fa-chevron-down'))
           })
         });
-  
+
         it('should not initially display the narrative text', () => {
           cy.get('.thumbnail .narrative-text')
-            .each((el,i) => {
+            .each((el, i) => {
               cy.wrap(el).should('not.be.visible')
             })
         });
@@ -141,7 +144,7 @@ describe('Dashboard Page', () => {
   context('layout', () => {
 
     beforeEach(function () {
-      cy.viewport((3000/1.5), (2000/1.5))
+      cy.viewport((3000 / 1.5), (2000 / 1.5))
     })
 
     describe('Dashboard page content', () => {
@@ -153,17 +156,17 @@ describe('Dashboard Page', () => {
       });
 
     })
-    
+
     describe('Thumbnail content', () => {
 
-      const selectors = ['.measure-icon','.title', '.filler', '.sparkline', '.error-badge-outer']
+      const selectors = ['.measure-icon', '.title', '.filler', '.sparkline', '.error-badge-outer']
 
       it('should display thumbnail contents in order', () => {
         cy.get('.thumbnail').each(el => {
           cy.wrap(el).selectorsAreOrdered(selectors)
         })
       })
-  
+
       it('should vertically align to center the thumbnail contents', () => {
         cy.get('.thumbnail').each(el => {
           cy.wrap(el).find(selectors.join(', '))
@@ -174,13 +177,18 @@ describe('Dashboard Page', () => {
             })
         })
       })
-  
+
       it('should left and right justify thumbnail contents', () => {
         cy.get('.thumbnail').each(el => {
           cy.wrap(el).find(selectors.join(', '))
             .then(children => {
-              const lrbounds = [...children].map(child => { return { left: child.offsetLeft, right: child.offsetLeft + child.offsetWidth }})
-              const gaps = lrbounds.map((bounds, i) => i === 0 ? bounds.left : Math.floor(bounds.left - lrbounds[i-1].right )) 
+              const lrbounds = [...children].map(child => {
+                return {
+                  left: child.offsetLeft,
+                  right: child.offsetLeft + child.offsetWidth
+                }
+              })
+              const gaps = lrbounds.map((bounds, i) => i === 0 ? bounds.left : Math.floor(bounds.left - lrbounds[i - 1].right))
               const fillerWidth = [...children][selectors.indexOf('.filler')].offsetWidth;
               expect(gaps.every(gap => gap < 50)).to.be.true
               expect(fillerWidth).to.be.greaterThan(10)
@@ -259,7 +267,7 @@ describe('Dashboard Page', () => {
     describe('thumbnail navigation', () => {
 
       beforeEach(() => {
-        cy.viewport((3000/1.5), (2000/1.5))
+        cy.viewport((3000 / 1.5), (2000 / 1.5))
         cy.visit('localhost:8080')
       })
 
@@ -278,11 +286,13 @@ describe('Dashboard Page', () => {
 const getIcon = (el) => {
   const faSizes = ['fa-sm', 'fa-md', 'fa-lg', 'fa-2x', 'fa-3x', 'fa-4x', 'fa-5x'];
   return el.className.split(' ')
-    .filter(cl => { return cl.substr(0, 3) === 'fa-' && !faSizes.includes(cl); })[0];
+    .filter(cl => {
+      return cl.substr(0, 3) === 'fa-' && !faSizes.includes(cl);
+    })[0];
 }
 
 const checkNth = (selector, n, check) => {
-  cy.get(selector).then( els => {
+  cy.get(selector).then(els => {
     cy.wrap([...els][n])
       .should(check)
   })

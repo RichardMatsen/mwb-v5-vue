@@ -1,12 +1,21 @@
 /* eslint-disable no-undef */
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
-import { mount, shallow, createLocalVue, cloneDeep } from '@vue/test-utils'
-import { servicesInjector } from '@/testing-utils/test-services.injector'
+import {
+  mount,
+  shallow,
+  createLocalVue,
+  cloneDeep
+} from '@vue/test-utils'
+import {
+  servicesInjector
+} from '@/testing-utils/test-services.injector'
 
 import App from '@/App'
 import router from '@/router/routes'
-import { createMockStore } from '@/testing-utils/test-store'
+import {
+  createMockStore
+} from '@/testing-utils/test-store'
 
 const localVue = createLocalVue()
 
@@ -14,16 +23,16 @@ describe('App component', () => {
 
   let mockStore, wrapper
 
-  beforeEach( () => {
+  beforeEach(() => {
     mockStore = createMockStore()
   });
 
-  beforeEach( () => {
+  beforeEach(() => {
     const mountOptions = {
-      store: mockStore, 
+      store: mockStore,
       router: router,
       localVue,
-      propsData: { },
+      propsData: {},
     }
     wrapper = shallow(App, mountOptions)
   });

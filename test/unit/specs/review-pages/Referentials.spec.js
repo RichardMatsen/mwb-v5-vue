@@ -3,12 +3,21 @@
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
 import vMediaQuery from 'v-media-query'
-import { mount, shallow, createLocalVue, cloneDeep } from '@vue/test-utils'
+import {
+  mount,
+  shallow,
+  createLocalVue,
+  cloneDeep
+} from '@vue/test-utils'
 
 import Referentials from '@/review-pages/Referentials.vue'
 import router from '@/router/routes'
-import { interceptor } from '@/testing-utils/test-interceptor'
-import { createMockStore } from '@/testing-utils/test-store'
+import {
+  interceptor
+} from '@/testing-utils/test-interceptor'
+import {
+  createMockStore
+} from '@/testing-utils/test-store'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -18,12 +27,16 @@ localVue.use(VueResource);
 const thisPage = 'referentials'
 let mockStore = createMockStore(thisPage)
 let wrapper
-const propsData = { page: 'somepage', content: '<div>some content</div>', zoom: '97%' }
+const propsData = {
+  page: 'somepage',
+  content: '<div>some content</div>',
+  zoom: '97%'
+}
 
 const createWrapper = () => {
   const mountOptions = {
     router: router,
-    store: mockStore, 
+    store: mockStore,
     localVue,
     propsData
   }
@@ -40,7 +53,7 @@ describe('Referentials', () => {
     localVue.http.interceptors.shift()
   })
 
-  beforeEach( () => {
+  beforeEach(() => {
     createWrapper()
   });
 
@@ -51,12 +64,5 @@ describe('Referentials', () => {
   it('renders page-common', () => {
     expect(wrapper.find('.bannertitle-container').exists()).to.equal(true)
   })
-
-  // describe('diagram button', () => {
-
-  //   it('', () => {
-  //     wrapper.vm.clickDiagramButton();
-  //   })
-  // })
 
 })

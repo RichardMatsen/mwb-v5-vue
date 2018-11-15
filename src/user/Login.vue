@@ -52,8 +52,8 @@ import textField from '@/common/textField/textField.vue'
 /* 
   Example of directive to add onChange to select element
   which currently does not emit change event when an option is selected
-  // Ref: https://stackoverflow.com/questions/46386061/vue-js-selected-doesnt-triggering-change-event-select-option
-  //      https://github.com/vuejs/vue/issues/4065
+  Ref: https://stackoverflow.com/questions/46386061/vue-js-selected-doesnt-triggering-change-event-select-option
+       https://github.com/vuejs/vue/issues/4065
 */
 Vue.directive('binding-change', {
   update: function (el, binding, vnode) {

@@ -1,7 +1,6 @@
 <template>
   <div class="card">
     <div>{{ title }}</div>
-    <div>{{ task.assignedTo }}</div>
   </div>
 </template>
 
@@ -14,7 +13,8 @@ export default {
   },
   computed: {
     title() {
-      return `${this.task.type} ${formatDate(this.task.effectiveDate, 'DD MMM')}`
+      const assignee = this.task.assignedTo ? `[${this.task.assignedTo}]` : ''
+      return `${this.task.description} ${formatDate(this.task.effectiveDate, 'DD MMM')} ${assignee}`.trim()
     }
   }
 

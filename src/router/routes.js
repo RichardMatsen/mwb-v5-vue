@@ -4,6 +4,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { store } from '@/store/store'
 
+import configstore from '../store/modules/config.store'
+store.registerModule('test', configstore);
+
 /* istanbul ignore next */
 const Dashboard = resolve => {
   require.ensure(['@/dashboard/Dashboard'], () => {
@@ -73,7 +76,10 @@ const routes = [
   { path: '/validations', name: 'Validations', component: Validations },
   { 
     path: '/referentials', name: 'Referentials', component: Referentials,
-    children: [{ path: '/referentialsGraph', name: 'ReferentialsGraphComponent', component: ReferentialsGraphComponent }]
+    children: [
+      { path: 'referentialsGraph', name: 'ReferentialsGraphComponent', 
+        component: ReferentialsGraphComponent }
+    ]
   },
   { path: '/clinics', name: 'Clinics', component: Clinics },
   { path: '/tasks', name: 'Tasks', component: Tasks, 

@@ -24,25 +24,22 @@
 
 <script>
   import dragula from 'dragula';
-  import './Kanban.scss'
+  import './KanbanBoard.scss'
 
   export default {
     name: 'KanbanBoard',
-
     props: {
       stages: {},
       blocks: {},
     },
-
     computed: {
       localBlocks() {
         return this.blocks;
       },
     },
-
     methods: {
-      getBlocks(status) {
-        return this.localBlocks.filter(block => block.status === status);
+      getBlocks(stage) {
+        return this.localBlocks.filter(block => block.status === stage);
       },
     },
     mounted() {
@@ -68,8 +65,6 @@
   };
 </script>
 
-<style scoped type="scss" src="./Kanban.scss">
-</style>
 <style scoped>
 h2 {
   font-family: 'Shadows Into Light Two', cursive;

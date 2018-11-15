@@ -1,6 +1,5 @@
 <template>
-  <div id="dataContainer" class="resultWrapper">
-  </div>
+  <div id="dataContainer" class="resultWrapper"></div>
 </template>
 
 <script>
@@ -51,8 +50,8 @@ export default {
 <style>
 /* This should not be scoped, as the mark tag and markSearch class are added dynamically */
 mark.markSearch {
-    color: #000;
-    background: #ff0;
-    padding: 0
+  color: #000;
+  background: #ff0;
+  padding: 0
 }
 </style>

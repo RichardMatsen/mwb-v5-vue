@@ -1,14 +1,14 @@
 <template>
-<div>
-  <page-common :page="PAGE" :namespace="'pages'">
-    <button class="referentials-button btn btn-info pull-right" slot="buttons" @click="clickDiagramButton">
-      <i class="fa fa-sitemap" aria-hidden="true"></i> {{buttonCaption}}
-    </button>
-    <transition name="slide" mode="out-in" slot="graph">
-      <router-view></router-view>
-    </transition>
-  </page-common>
-</div>
+  <div>
+    <page-common :page="PAGE" :namespace="'pages'">
+      <button class="referentials-button btn btn-info pull-right" slot="buttons" @click="clickDiagramButton">
+        <i class="fa fa-sitemap" aria-hidden="true"></i> {{buttonCaption}}
+      </button>
+      <transition name="slide" mode="out-in" slot="graph">
+        <router-view></router-view>
+      </transition>
+    </page-common>
+  </div>
 </template>
 
 <script>
@@ -31,12 +31,8 @@ export default {
     clickDiagramButton() {
       /* istanbul ignore next */
       this.showGraph = !this.showGraph
-      /* istanbul ignore next */
-      if (this.showGraph) {
-        this.$router.push('referentialsGraph')
-      } else {
-        this.$router.push('referentials')
-      }
+      const link = this.showGraph ? '/referentials/referentialsGraph' : '/referentials'
+      this.$router.push(link)
     }
   },
   components: {

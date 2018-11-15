@@ -102,7 +102,7 @@ const createMockStore = (thisPage = 'somepage', _options) => {
     getters: {
       'pages/visibleFiles': (state) => (page) => files.slice(0, options.numVisible),
       'pages/fileInfo': (state) => (page) => options.fileInfo,
-      'searchResutsCountForFile': (state) => (fileName) => 0
+      'searchResultsCountForFile': (state) => (fileName) => 0
     },
     mutations: {
       'UPDATE_USER'(state, payload) {

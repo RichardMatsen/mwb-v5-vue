@@ -11,9 +11,7 @@ export default {
 const drawLinks = (currentNode) => {
   const linkData = graph.rootNode.links();
   const linkSelect = graph.svg.selectAll('path.link')
-    .data(linkData, (d) => {
-      return d.target.data.id;
-    });
+    .data(linkData, (d) => { return d.target.data.id; });
   const linkContainers = linkSelect
     .enter()
     .insert('g', 'g') // 2nd param puts links before nodes, so node is above link in z-order
@@ -28,24 +26,17 @@ const drawLinks = (currentNode) => {
 const drawPath = (linkEnter, currentNode) => {
   const paths = linkEnter.append('path')
     .attr('class', 'link')
-    .attr('id', function (d, i) {
-      return d.target.data.id;
-    })
+    .attr('id', function (d, i) { return d.target.data.id; })
     .style('fill', graph.links.fill)
     .style('stroke', graph.links.stroke)
     .style('stroke-width', graph.links.strokewidth)
     .attr('d', (d) => {
-      const o = {
-        x: currentNode.x0,
-        y: currentNode.y0
-      };
+      const o = { x: currentNode.x0, y: currentNode.y0 };
       return graph.diagonal(o, o);
     })
     .transition()
     .duration(graph.duration)
-    .attr('d', (d) => {
-      return graph.diagonal(d.source, d.target);
-    });
+    .attr('d', (d) => { return graph.diagonal(d.source, d.target); });
   return paths;
 }
 
@@ -55,19 +46,13 @@ const drawPathText = (linkEnter) => {
     .attr('x', 60)
     .attr('dy', 4)
     .append('svg:textPath')
-    .attr('id', function (d, i) {
-      return 'TP' + d.target.data.id;
-    })
+    .attr('id', function (d, i) { return 'TP' + d.target.data.id; })
     .attr('class', 'textpath')
     .attr('fill', '#910f00')
     .style('font-size', 10)
     .style('fill-opacity', opacity)
-    .attr('xlink:href', (d, i) => {
-      return '#' + d.target.data.id;
-    })
-    .text((d, i) => {
-      return d.target.data.parent_FK ? d.target.data.parent_FK.join(', ') : '';
-    });
+    .attr('xlink:href', (d, i) => { return '#' + d.target.data.id; })
+    .text((d, i) => { return d.target.data.parent_FK ? d.target.data.parent_FK.join(', ') : ''; });
   return textPaths;
 }
 
@@ -93,10 +78,7 @@ const drawTransition = (linkSelect, currentNode) => {
     .transition()
     .duration(graph.duration)
     .attr('d', (d) => {
-      const o = {
-        x: currentNode.x,
-        y: currentNode.y
-      };
+      const o = { x: currentNode.x, y: currentNode.y };
       return graph.diagonal(o, o);
     });
 }

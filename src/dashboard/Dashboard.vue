@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div ref="dashboard" class="dashboard">
     <div class="card">
       <h1 class="page-title">{{title}} </h1>
       <span class="subtitle">Summary of errors, load failures, clinic matching, team tasks</span>
@@ -21,7 +21,7 @@ export default {
   dependencies : ['dataService', 'configService', 'measureService'],
   data () {
     return {
-      title: 'Dashboard'
+      title: 'Dashboard',
     }
   },
   computed: {
@@ -30,7 +30,7 @@ export default {
     } 
   },
   methods: {
-    initialize () {
+    initialize: function() {
       this.configService.checkConfig().then(_ => {
         this.measureService.checkMeasures().then(_ => {
           this.dataService.checkAllFiles().then(_ =>  {
@@ -44,7 +44,7 @@ export default {
     this.initialize()
   },
   components: {
-    'dashboard-thumbnail': DashboardThumbnail
+    'dashboard-thumbnail': DashboardThumbnail,
   }
 }
 </script>

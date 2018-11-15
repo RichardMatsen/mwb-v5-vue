@@ -1,6 +1,4 @@
-import {
-  store
-} from '@/store/store'
+import { store } from '@/store/store'
 import Mark from 'mark.js'
 
 const getResults = (searchTerm, pageType) => {

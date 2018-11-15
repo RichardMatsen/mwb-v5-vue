@@ -2,6 +2,8 @@
 
 ![dashboard](static/docs/images/dashboard.jpg)
 
+A port of the Angular MWB project to VueJs.
+
 ## **Application Overview**
 
 A web app for reviewing test results and overall progress of a data migration project (Healthcare).  

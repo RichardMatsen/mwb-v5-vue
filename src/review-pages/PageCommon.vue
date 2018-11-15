@@ -13,7 +13,7 @@
 
     <slot name="graph"></slot>
     
-    <div :id="'filecontent'" class="row">
+    <div :id="'filecontent'" class="filecontent row">
 
       <div class="filelistcontainer" :class="'col-md-' + config.page.listWidth">
         <file-list :page="page" :id="'filelist'" :title="config.page.listTitle"
@@ -25,7 +25,8 @@
         <div class="card">
           <result-header :page="page"></result-header>
           <div class="result-wrapper">
-            <result-wrapper :page="page" :content="(fileInfo(page) || {}).content" 
+            <result-wrapper :page="page" 
+              :content="(fileInfo(page) || {}).content" 
               :zoom="config.page.resultsZoom"></result-wrapper>
           </div>
         </div>

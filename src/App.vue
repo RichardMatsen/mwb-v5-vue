@@ -26,7 +26,7 @@ import splitter from "./common/splitter/Splitter";
 import debounce from "debounce";
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     "mwb-navigation": Nav,
     "mwb-about": About,
@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      docsPanelStyle: { zoom: `${33 + 50}%`, height: "100vh" },
+      docsPanelStyle: { zoom: "88%", height: "100vh" },
       splitterConfig: {
         minPanelLeft: 20,
         minPanelRight: 50,
@@ -54,6 +54,7 @@ export default {
   }
 };
 </script>
+
 <style src="./app-animation.css"></style>
 <style>
 #app {
